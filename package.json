@@ -1,0 +1,58 @@
+{
+  "name": "2019-ncov-vue3-version",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "start": "yarn serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "format": "prettier --write \"src/**/*.js\" \"src/**/*.ts\" \"src/**/*.vue\"",
+    "commit": "git-cz"
+  },
+  "dependencies": {
+    "@vue/composition-api": "^0.3.4",
+    "axios": "^0.19.2",
+    "dayjs": "^1.8.19",
+    "echarts": "^4.6.0",
+    "path": "^0.12.7",
+    "prettier": "^1.19.1",
+    "view-design": "^4.1.2",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@types/vue": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
+    "@vue/cli-plugin-eslint": "~4.2.0",
+    "@vue/cli-plugin-typescript": "~4.2.0",
+    "@vue/cli-service": "~4.2.0",
+    "@vue/eslint-config-typescript": "^5.0.1",
+    "babel-plugin-component": "^1.1.1",
+    "commitizen": "^4.0.3",
+    "compression-webpack-plugin": "^3.1.0",
+    "cz-customizable": "^6.2.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.1.2",
+    "husky": "^1.0.0-rc.13",
+    "lint-staged": "^7.2.2",
+    "typescript": "~3.7.5",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "npm run format",
+      "git add"
+    ]
+  }
+}
