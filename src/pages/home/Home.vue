@@ -4,7 +4,7 @@
       <p class="title">新型冠状病毒肺炎疫情</p>
       <p class="tip">实时动态</p>
     </div>
-    <Tabs value="name1" size="small" @on-click="tabChange">
+    <Tabs value="name1" size="small" @on-click="tabChange" :animated="false">
       <TabPane label="疫情地图" name="name1" class="map">
         <span class="allCountry">全国</span>
         <span>截至{{ state.virusDesc.modifyTime }}(北京时间)</span>
@@ -41,10 +41,12 @@
           />
         </div>
         <Divider />
-        <p>各省最新疫情查询（点击选择具体省份）：</p>
-        <Select v-model="state.provinceName" style="width:90%;">
-           <Option v-for="item in state.provinceList" :value="item" :key="item">{{ item }}</Option>
-        </Select>
+        <div>
+          <p>各省最新疫情查询（点击选择具体省份）：</p>
+          <Select v-model="state.provinceName" style="width:90%;" @on-change="selectChange">
+            <Option v-for="item in state.provinceList" :value="item" :key="item">{{ item }}</Option>
+          </Select>
+        </div>
         <div class="mapContainer">
           <Map :provinceName="state.provinceName" :mapList="state.mapList" />
         </div>
@@ -52,20 +54,34 @@
           <Table :columns="tablecolum.columns" :data="state.mapList"></Table>
         </div>
       </TabPane>
-      <TabPane label="最新消息" name="name2">标签二的内容</TabPane>
+      <TabPane label="最新消息" name="name2">
+        <div class="newsBox">
+          <News :newlist="state.newsList" />
+        </div>
+      </TabPane>
       <TabPane label="辟谣信息" name="name3">标签三的内容</TabPane>
       <TabPane label="疫情趋势" name="name4">标签四的内容</TabPane>
     </Tabs>
+    <!-- <div class="footer">
+      <p>武汉加油呀~</p>
+      <a href="http://www.beian.miit.gov.cn/" target="view_window">
+        渝ICP备17013916号
+      </a>
+      <a href="https://github.com/xieyezi/2019-ncov-vue3-version" target="view_window">
+        Github
+      </a>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
 import dayjs from 'dayjs'
-import { createComponent, onBeforeMount, onMounted, onUnmounted, reactive, toRefs, ref } from '@vue/composition-api'
+import { createComponent, onMounted, onUnmounted, reactive } from '@vue/composition-api'
 import { getVirusDataOnTime, getVirusDataStatic, getRumor, getTrend } from '@/services/getData'
 import { getMapData, getMapProvinceData } from '@/utils/getMapData'
 import Category from '@/components/category/Category.vue'
 import Map from '@/pages/map/Map.vue'
+import News from '@/pages/news/News.vue'
 
 export interface HomeState {
   newsList?: []
@@ -107,7 +123,8 @@ export default createComponent({
   name: 'Home',
   components: {
     Category,
-    Map
+    Map,
+    News
   },
   setup() {
     const origin: HomeState = {
@@ -172,6 +189,10 @@ export default createComponent({
       if (res.status === 200) {
         // console.log(res.data.newslist)
         const { news, desc } = res.data.newslist[0]
+        desc.modifyTime = dayjs(desc.modifyTime).format('YYYY年MM月DD日 HH:mm')
+        news.forEach((item: any) => {
+          item.pubDate = dayjs(item.pubDate).format('YYYY年MM月DD日 HH:mm')
+        })
         state.newsList = news
         state.virusDesc = desc
       }
@@ -180,13 +201,12 @@ export default createComponent({
         // console.log(resuslt)
         const { newslist } = resuslt.data
         const maplist = getMapData(newslist)
-        console.log(maplist)
         const provinceArr = [] as any
         provinceArr.push('全国')
         maplist.forEach((item: any) => {
           provinceArr.push(item.provinceShortName)
         })
-        // state.staticList = newslist
+        state.staticList = newslist
         state.mapList = maplist
         state.provinceList = provinceArr
         state.loading = false
@@ -196,6 +216,27 @@ export default createComponent({
     }
     const tabChange = (tabName: string) => {
       console.log(tabName)
+    }
+    const selectChange = (province: string) => {
+      let cites: [] = []
+      let provinceName
+      for (const item of state.staticList as any) {
+        if (province === item.provinceShortName) {
+          cites = item.cities
+          provinceName = item.provinceName
+          break
+        }
+      }
+      if (cites.length !== 0) {
+        const maplist = getMapProvinceData(cites, provinceName)
+        // console.log(maplist)
+        state.mapList = maplist
+        state.provinceName = province
+      } else {
+        const maplist = getMapData(state.staticList)
+        state.mapList = maplist
+        state.provinceName = '全国'
+      }
     }
     // 生命周期部分
     onMounted(() => {
@@ -209,14 +250,15 @@ export default createComponent({
 
     return {
       state,
+      tablecolum,
       tabChange,
-      tablecolum
+      selectChange
     }
   }
 })
 </script>
 
-<style>
+<style scoped>
 .top {
   background-image: url('https://cdn.xieyezi.com/nvov.jpg');
   height: 150px;
@@ -257,10 +299,29 @@ export default createComponent({
   color: #fff;
   font-size: 12px;
 }
-.mapContainer{
-  height: 350px;
+.mapContainer {
+  height: 400px;
 }
-.table{
+.table {
   height: 100%;
+  margin-bottom: 20px;
+}
+.newsBox {
+  width: 90%;
+  margin: 0 auto;
+  background: #fff;
+}
+.footer {
+  padding-bottom: 20px;
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  font-size: 12px;
+  color: #6c63ff;
+  line-height: 14px;
+}
+.footer a {
+  color: #6c63ff;
 }
 </style>

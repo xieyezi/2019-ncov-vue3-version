@@ -6,30 +6,25 @@
 import { createComponent, watch, ref } from '@vue/composition-api'
 import { getChinaJson, getProvinceJson } from '@/services/getData'
 import provinceMap from '@/map/province-map'
-import Echarts from "echarts"
+import Echarts from 'echarts'
 
 export default createComponent({
+  name: 'Map',
   props: {
     provinceName: String,
     mapList: Array
   },
   setup(props, context) {
-    const map = ref(null)
     watch(async () => {
       const { provinceName, mapList } = props
       // console.log(provinceName)
       // console.log(mapList)
       const mychart = Echarts.init(context.refs.map)
-      // console.log(mychart)
       const province = provinceName ? provinceMap[provinceName] : ''
-      // console.log(province)
       if (!province) {
         const chinaMapJson = await getChinaJson()
-        // console.log(chinaMapJson)
-        // console.log(mychart)
         Echarts.registerMap('china', chinaMapJson.data)
       } else {
-        // 修复陕西和山西 key 重名问题
         const provinceMapJson = await getProvinceJson(province)
         Echarts.registerMap(province, provinceMapJson.data)
       }
@@ -107,17 +102,16 @@ export default createComponent({
           }
         ]
       }
-      // console.log(option)
       mychart.setOption(option)
     })
   }
 })
 </script>
 
-<style>
-.mapBox{
-   height: 100%;
-   width: 100%;
-   background-color: #fff;
+<style scoped>
+.mapBox {
+  height: 400px;
+  width: 100%;
+  background-color: #fff;
 }
 </style>
