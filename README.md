@@ -218,12 +218,6 @@ Vue.use(VueCompositionApi)
   看到这里，小伙伴们基本上了解Vue3 的相关操作和基本入门，大家也操作起来吧！
   ### 效果截图
   我们还是来看看效果截图:
-  https://i.loli.net/2020/02/11/NQjKXpVUDqTmlYH.png
-https://i.loli.net/2020/02/11/6p3rdBgL8uwqK7n.png
-https://i.loli.net/2020/02/11/dyZLGCoswuqzmF4.png
-https://i.loli.net/2020/02/11/7Hpx6JVMIt3Surv.png
-https://i.loli.net/2020/02/11/TXarLpDwEjncIZ2.png
-https://i.loli.net/2020/02/11/swmcC3ifhAXFIbL.png
    <br />
 <div text="center">
  <img width="48%" src="https://i.loli.net/2020/02/11/swmcC3ifhAXFIbL.png"/>
