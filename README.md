@@ -3,7 +3,7 @@
 > [线上地址](http://www.xieyezi.com:9001/)  
 > [git地址](https://github.com/xieyezi/2019-ncov-vue3-version)
 
-因为疫情太过严重，只能呆在家，所以前几天用 `React`+ `Antd` 写了一个疫情查询小工具：[React 版本](http://www.xieyezi.com:9001/)，也算为疫情的防控做了一点点贡献。这两天呢，看见 Vue3-Alpha 版本都出到 v3.0.0-alpha.4 了，如图：
+因为疫情太过严重，只能呆在家，所以前几天用 `React`+ `Antd` 写了一个疫情查询小工具：[React 版本](https://juejin.im/post/5e3a4f7ae51d4527066e811b)，也算为疫情的防控做了一点点贡献。这两天呢，看见 Vue3-Alpha 版本都出到 v3.0.0-alpha.4 了，如图：
 
 ![QQ20200211-170124@2x.png](https://i.loli.net/2020/02/11/HYgZL7sRFIaPdB5.png)
 在这个版本中，主要的工作就只剩下处理服务器端渲染了，所以Vu3真的是指日可待了。同时官方呢希望我们能够积极试用 Vue 新版本。为了响应号召（只是因为在家太无聊了），所以我们来试一试利用`Vue3: Vue-Composition-Api` + `Typescript` 来重构我们的疫情查看小工具。
@@ -214,24 +214,30 @@ Vue.use(VueCompositionApi)
     }
     })
   ```
-  ### 效果截图
 
+  看到这里，小伙伴们基本上了解Vue3 的相关操作和基本入门，大家也操作起来吧！
+  ### 效果截图
   我们还是来看看效果截图:
+  https://i.loli.net/2020/02/11/NQjKXpVUDqTmlYH.png
+https://i.loli.net/2020/02/11/6p3rdBgL8uwqK7n.png
+https://i.loli.net/2020/02/11/dyZLGCoswuqzmF4.png
+https://i.loli.net/2020/02/11/7Hpx6JVMIt3Surv.png
+https://i.loli.net/2020/02/11/TXarLpDwEjncIZ2.png
+https://i.loli.net/2020/02/11/swmcC3ifhAXFIbL.png
    <br />
 <div text="center">
- <img width="48%" src="https://i.loli.net/2020/02/07/DEQlkAiw3MJ1Z9z.png"/>
- <img width="48%" src="https://i.loli.net/2020/02/07/dWiA1jsyl56HMkF.png"/>
- <img width="48%" src="https://i.loli.net/2020/02/05/fcIAbX6StMsz8Lv.png"/>
- <img width="48%" src="https://i.loli.net/2020/02/05/8NXTyZkaUw1qs46.png"/>
- <img width="48%" src="https://i.loli.net/2020/02/05/LxlPgn1wQHAER5q.png"/>
- <img width="48%" src="https://i.loli.net/2020/02/05/F1HbnVfWhwogyDX.png"/>
+ <img width="48%" src="https://i.loli.net/2020/02/11/swmcC3ifhAXFIbL.png"/>
+ <img width="48%" src="https://i.loli.net/2020/02/11/NQjKXpVUDqTmlYH.png"/>
+ <img width="48%" src="https://i.loli.net/2020/02/11/dyZLGCoswuqzmF4.png"/>
+ <img width="48%" src=" https://i.loli.net/2020/02/11/TXarLpDwEjncIZ2.png"/>
+ <img width="48%" src="https://i.loli.net/2020/02/11/7Hpx6JVMIt3Surv.png"/>
+ <img width="48%" src="https://i.loli.net/2020/02/11/6p3rdBgL8uwqK7n.png"/>
 </div> 
  <br />
 
- 几乎和React 版本一样。
- ### 总结
- 
-  所以看到这，小伙伴们基本上了解Vue3 的相关操作和基本入门，大家也操作起来吧！
+ 最后，武汉加油⛽️！
+
+  
 
   
 
