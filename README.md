@@ -3,7 +3,7 @@
 
 ## 2019-ncov-vue3-version
 
-> [线上地址](http://www.xieyezi.com:9001/)  
+> [线上地址](http://www.xieyezi.com:9002/)  
 > [git地址](https://github.com/xieyezi/2019-ncov-vue3-version)
 
 因为疫情太过严重，只能呆在家，所以前几天用 `React`+ `Antd` 写了一个疫情查询小工具：[React 版本](https://juejin.im/post/5e3a4f7ae51d4527066e811b)，也算为疫情的防控做了一点点贡献。这两天呢，看见 Vue3-Alpha 版本都出到 v3.0.0-alpha.4 了，如图：
