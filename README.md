@@ -1,3 +1,6 @@
+
+![you.png](https://user-gold-cdn.xitu.io/2020/2/11/17033c7ed72a61bc?w=1600&h=480&f=png&s=980699)
+
 ## 2019-ncov-vue3-version
 
 > [线上地址](http://www.xieyezi.com:9001/)  
@@ -214,8 +217,32 @@ Vue.use(VueCompositionApi)
     }
     })
   ```
+  ### Docker部署
+  ```
+   # ncov-vue3 Dockerfile
 
+    #指定node镜像对项目进行依赖安装和打包
+    FROM node:10.16.0 AS builder
+    # 将容器的工作目录设置为/app(当前目录，如果/app不存在，WORKDIR会创建/app文件夹)
+    WORKDIR /app 
+    COPY package.json /app/ 
+    RUN npm config set registry "https://registry.npm.taobao.org/" \
+        && npm install
+    
+    COPY . /app   
+    RUN npm run build 
+
+    #指定nginx配置项目，--from=builder 指的是从上一次 build 的结果中提取了编译结果(FROM node:alpine as builder)，即是把刚刚打包生成的dist放进nginx中
+    FROM nginx
+    COPY --from=builder app/dist /usr/share/nginx/html/
+    COPY --from=builder app/nginx.conf /etc/nginx/nginx.conf
+
+
+    #暴露容器80端口
+    EXPOSE 80
+  ```
   看到这里，小伙伴们基本上了解Vue3 的相关操作和基本入门，大家也操作起来吧！
+
   ### 效果截图
   我们还是来看看效果截图:
    <br />
