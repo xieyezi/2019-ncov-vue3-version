@@ -6,7 +6,10 @@
 import { createComponent, watch, ref } from '@vue/composition-api'
 import { getChinaJson, getProvinceJson } from '@/services/getData'
 import provinceMap from '@/map/province-map'
-import Echarts from 'echarts'
+import Echarts from 'echarts/lib/echarts'
+import 'echarts/lib/chart/map'
+import 'echarts/lib/component/visualMap'
+import 'echarts/lib/component/tooltip'
 
 export default createComponent({
   name: 'Map',
@@ -20,7 +23,8 @@ export default createComponent({
       // console.log(provinceName)
       // console.log(mapList)
       const mychart = Echarts.init(context.refs.map)
-      const province = provinceName ? provinceMap[provinceName] : ''
+      const province = provinceMap[provinceName]
+      
       if (!province) {
         const chinaMapJson = await getChinaJson()
         Echarts.registerMap('china', chinaMapJson.data)

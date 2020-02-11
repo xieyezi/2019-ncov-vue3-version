@@ -4,8 +4,8 @@
       <p class="title">新型冠状病毒肺炎疫情</p>
       <p class="tip">实时动态</p>
     </div>
-    <Tabs value="name1" size="small" @on-click="tabChange" :animated="false">
-      <TabPane label="疫情地图" name="name1" class="map">
+    <Tabs value="map" size="small" @on-click="tabChange" :animated="false">
+      <TabPane label="疫情地图" name="map" class="map">
         <span class="allCountry">全国</span>
         <span>截至{{ state.virusDesc.modifyTime }}(北京时间)</span>
         <div class="categoryBox">
@@ -53,24 +53,52 @@
         <div class="table">
           <Table :columns="tablecolum.columns" :data="state.mapList"></Table>
         </div>
+        <div class="footer">
+          <p>武汉加油呀~</p>
+          <a href="http://www.beian.miit.gov.cn/" target="view_window">
+            渝ICP备17013916号
+          </a>
+          <a href="https://github.com/xieyezi/2019-ncov-vue3-version" target="view_window">
+            Github
+          </a>
+        </div>
       </TabPane>
-      <TabPane label="最新消息" name="name2">
+      <TabPane label="最新消息" name="news">
         <div class="newsBox">
           <News :newlist="state.newsList" />
         </div>
       </TabPane>
-      <TabPane label="辟谣信息" name="name3">标签三的内容</TabPane>
-      <TabPane label="疫情趋势" name="name4">标签四的内容</TabPane>
+      <TabPane label="辟谣信息" name="rumor">
+        <div class="rumorBox">
+          <Roumor :rumorList="state.rumorList" />
+        </div>
+      </TabPane>
+      <TabPane label="疫情趋势" name="trend">
+        <div class="trendBox">
+            <TrendLine
+              v-if="state.dateList.length !== 0"
+              :dateList="state.dateList"
+              :firstList="state.confirmedTrendList"
+              :secondList="state.suspectedTrendList"
+              :firstColor="'#e57471'"
+              :secondColor="'#dda451'"
+              :legendData="['确诊人数', '疑似人数']"
+            />
+            <Divider v-if="state.dateList.length !== 0" />
+            <TrendLine
+              v-if="state.dateList.length !== 0"
+              :dateList="state.dateList"
+              :firstList="state.deadTrendList"
+              :secondList="state.curedTrendList"
+              :firstColor="'#919399'"
+              :secondColor="'#7ebe50'"
+              :legendData="['死亡人数', '治愈人数']"
+            />
+            <Divider v-if="state.dateList.length !== 0" />
+            <Pie :virusDesc="state.virusDesc" />
+        </div>
+      </TabPane>
     </Tabs>
-    <!-- <div class="footer">
-      <p>武汉加油呀~</p>
-      <a href="http://www.beian.miit.gov.cn/" target="view_window">
-        渝ICP备17013916号
-      </a>
-      <a href="https://github.com/xieyezi/2019-ncov-vue3-version" target="view_window">
-        Github
-      </a>
-    </div> -->
   </div>
 </template>
 
@@ -82,6 +110,9 @@ import { getMapData, getMapProvinceData } from '@/utils/getMapData'
 import Category from '@/components/category/Category.vue'
 import Map from '@/pages/map/Map.vue'
 import News from '@/pages/news/News.vue'
+import Roumor from '@/pages/rumor/Rumor.vue'
+import Pie from '@/pages/pie/Pie.vue'
+import TrendLine from '@/pages/line/TrendLine.vue'
 
 export interface HomeState {
   newsList?: []
@@ -114,7 +145,6 @@ export interface HomeState {
     curedIncr: number
   }
   provinceName?: string
-  tabIndex: number
   loading: boolean
   trendLoading: boolean
 }
@@ -124,7 +154,10 @@ export default createComponent({
   components: {
     Category,
     Map,
-    News
+    News,
+    Roumor,
+    Pie,
+    TrendLine
   },
   setup() {
     const origin: HomeState = {
@@ -152,7 +185,6 @@ export default createComponent({
       mapList: [],
       rumorList: [],
       provinceName: '全国', //是否点击了某个省份
-      tabIndex: 0,
       dateList: [],
       confirmedTrendList: [],
       suspectedTrendList: [],
@@ -184,6 +216,49 @@ export default createComponent({
       ]
     })
     // methods
+    const getRumorList = async () => {
+      const res = await getRumor()
+      const { newslist } = res.data
+      // console.log(newslist)
+      state.rumorList = newslist
+    }
+    const getTrendList = async () => {
+      const trend = await getTrend()
+      //console.log(trend);
+      const trendList = trend.data.results
+      const dateArr = [] as any
+      const confirmedArr = [] as any
+      const suspectedArr = [] as any
+      const deadArr = [] as any
+      const curedArr = [] as any
+      const datelist = [] as any
+      const confirmedList = [] as any
+      const suspectedList = [] as any
+      const deadList = [] as any
+      const curedList = [] as any
+      trendList.forEach((item: any) => {
+        dateArr.push(dayjs(item.updateTime).format('MM-DD'))
+        confirmedArr.push(item.confirmedCount)
+        suspectedArr.push(item.suspectedCount)
+        deadArr.push(item.deadCount)
+        curedArr.push(item.curedCount)
+      })
+      dateArr.reverse().forEach((item: any, index: number) => {
+        if (item !== dateArr[index + 1]) {
+          datelist.push(item)
+          confirmedList.push(confirmedArr[index])
+          suspectedList.push(suspectedArr[index])
+          deadList.push(deadArr[index])
+          curedList.push(curedArr[index])
+        }
+      })
+      state.dateList = datelist
+      state.confirmedTrendList = confirmedList.reverse()
+      state.suspectedTrendList = suspectedList.reverse()
+      state.deadTrendList = deadList.reverse()
+      state.curedTrendList = curedList.reverse()
+      state.trendLoading = false
+    }
     const initData = async () => {
       const res = await getVirusDataOnTime()
       if (res.status === 200) {
@@ -213,9 +288,13 @@ export default createComponent({
         //state.virusDesc.modifyTime = dayjs(state.virusDesc.modifyTime).format('YYYY年MM月DD日 HH:mm')
         // console.log(state)
       }
+      getRumorList()
     }
     const tabChange = (tabName: string) => {
-      console.log(tabName)
+      // console.log(tabName)
+      if (tabName === 'trend') {
+        getTrendList()
+      }
     }
     const selectChange = (province: string) => {
       let cites: [] = []
@@ -242,10 +321,10 @@ export default createComponent({
     onMounted(() => {
       // console.log('onMounted...')
       initData()
-      console.log(state)
+      // console.log(state)
     })
     onUnmounted(() => {
-      console.log('onUnmounted...')
+      // console.log('onUnmounted...')
     })
 
     return {
@@ -310,6 +389,16 @@ export default createComponent({
   width: 90%;
   margin: 0 auto;
   background: #fff;
+}
+.rumorBox {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 20px;
+  background: #fff;
+}
+.trendBox {
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 .footer {
   padding-bottom: 20px;

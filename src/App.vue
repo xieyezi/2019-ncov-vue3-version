@@ -41,4 +41,10 @@ body {
 .ivu-select {
   text-align: start;
 }
+.rumorBox .ivu-card-body{
+  padding: 0px
+}
+.ivu-carousel-list {
+  border-radius: 20px;
+}
 </style>
