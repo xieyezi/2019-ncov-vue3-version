@@ -191,6 +191,13 @@ Vue.use(VueCompositionApi)
     const initData = async () => {
       ....
     }
+    // 在生命周期里面调用
+    onMounted(() => {
+        console.log('onMounted...')
+        initData()
+        getRumorList()
+        getTrendList()
+    })
   }
   ```
   #### 组件的导入及使用
