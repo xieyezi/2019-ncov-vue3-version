@@ -27,7 +27,7 @@
     "@typescript-eslint/parser": "^2.18.0",
     "@vue/cli-plugin-eslint": "~4.2.0",
     "@vue/cli-plugin-typescript": "~4.2.0",
-    "@vue/cli-service": "~4.2.0",
+    "@vue/cli-service": "~5.0.8",
     "@vue/eslint-config-typescript": "^5.0.1",
     "babel-plugin-component": "^1.1.1",
     "commitizen": "^4.0.3",
